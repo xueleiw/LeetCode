@@ -12,43 +12,82 @@
 using namespace std;
 
 
+// class Solution {
+// public:
+//     void quickSort(vector<int>& nums, int l, int r) {
+//         if(l >= r) {
+//             return;
+//         }
+
+//         // 取中间
+//         // int privot = nums[(l + r) / 2];
+//         // 取随机数
+//         int privot = nums[(rand() % (r - l + 1)) + l];
+//         int left = l;
+//         int right = r;
+//         while(true) {
+//             while(nums[left] < privot) {
+//                 left++;
+//             }
+//             while(nums[right] > privot) {
+//                 right--;
+//             }
+//             if(left < right) {
+//                 swap(nums[left], nums[right]);
+//                 left++;right--;  // 关键的是这里，为了防止死循环一直交换，需要在每次交换完之后进1
+//             } else {
+//                 break;
+//             }
+//         }
+//         quickSort(nums, l, right);
+//         quickSort(nums, right + 1, r);
+//         return;
+//     }
+
+//     vector<int> sortArray(vector<int>& nums) {
+//         quickSort(nums, 0, nums.size() - 1);
+//         return nums;  // 会拷贝出一个全新的对象
+//     }
+// };
+
+
+// 8-10
 class Solution {
 public:
-    void quickSort(vector<int>& nums, int l, int r) {
+    void qSort(vector<int>& nums, int l, int r) {
         if(l >= r) {
             return;
         }
 
-        // 取中间
-        // int privot = nums[(l + r) / 2];
-        // 取随机数
-        int privot = nums[(rand() % (r - l + 1)) + l];
-        int left = l;
-        int right = r;
+        int i = l, j = r;
+        int pivot = nums[(l + r) / 2];
         while(true) {
-            while(nums[left] < privot) {
-                left++;
+            while(nums[l] < pivot) {
+                l++;
             }
-            while(nums[right] > privot) {
-                right--;
+            while(nums[r] > pivot) {
+                r--;
             }
-            if(left < right) {
-                swap(nums[left], nums[right]);
-                left++;right--;  // 关键的是这里，为了防止死循环一直交换，需要在每次交换完之后进1
+            if(l < r) {
+                swap(nums[l], nums[r]);
+                l++;
+                r--;
             } else {
                 break;
             }
         }
-        quickSort(nums, l, right);
-        quickSort(nums, right + 1, r);
+        qSort(nums, i, r);
+        qSort(nums, r + 1, j);
         return;
     }
 
     vector<int> sortArray(vector<int>& nums) {
-        quickSort(nums, 0, nums.size() - 1);
-        return nums;  // 会拷贝出一个全新的对象
+        qSort(nums, 0, nums.size() - 1);
+        return nums;
     }
 };
+
+
 
 
 int main() {
