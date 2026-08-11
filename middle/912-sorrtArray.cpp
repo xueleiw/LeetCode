@@ -52,6 +52,41 @@ using namespace std;
 
 
 // 8-10
+// class Solution {
+// public:
+//     void qSort(vector<int>& nums, int l, int r) {
+//         if(l >= r) {
+//             return;
+//         }
+
+//         int i = l, j = r;
+//         int pivot = nums[(l + r) / 2];
+//         while(true) {
+//             while(nums[l] < pivot) {
+//                 l++;
+//             }
+//             while(nums[r] > pivot) {
+//                 r--;
+//             }
+//             if(l < r) {
+//                 swap(nums[l], nums[r]);
+//                 l++;
+//                 r--;
+//             } else {
+//                 break;
+//             }
+//         }
+//         qSort(nums, i, r);
+//         qSort(nums, r + 1, j);
+//         return;
+//     }
+
+//     vector<int> sortArray(vector<int>& nums) {
+//         qSort(nums, 0, nums.size() - 1);
+//         return nums;
+//     }
+// };
+
 class Solution {
 public:
     void qSort(vector<int>& nums, int l, int r) {
@@ -59,26 +94,27 @@ public:
             return;
         }
 
+        // int pivot = nums[(l + r) / 2];
+        int pivot = nums[(rand() % (r - l + 1)) + l];
         int i = l, j = r;
-        int pivot = nums[(l + r) / 2];
         while(true) {
-            while(nums[l] < pivot) {
-                l++;
+            while(nums[i] < pivot) {
+                i++;
             }
-            while(nums[r] > pivot) {
-                r--;
+            while(nums[j] > pivot) {
+                j--;
             }
-            if(l < r) {
-                swap(nums[l], nums[r]);
-                l++;
-                r--;
+            if(i < j) {
+                swap(nums[i], nums[j]);
+                i++;
+                j--;
             } else {
                 break;
             }
         }
-        qSort(nums, i, r);
-        qSort(nums, r + 1, j);
-        return;
+
+        qSort(nums, l, j);
+        qSort(nums, j + 1, r);
     }
 
     vector<int> sortArray(vector<int>& nums) {
@@ -86,8 +122,6 @@ public:
         return nums;
     }
 };
-
-
 
 
 int main() {
