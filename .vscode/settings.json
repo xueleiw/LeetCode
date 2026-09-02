@@ -99,7 +99,7 @@
         "plaintext": false,
         "markdown": false,
         "scminput": false,
-        "cpp": true
+        "cpp": false
     },
     "C_Cpp.default.compilerPath": "D:/software/mingw64/bin/g++.exe",
 }
