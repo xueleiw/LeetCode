@@ -1,91 +1,66 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-// 0907
+// 0908  回溯：选择-寻找-回退
 
 class Solution {
     private:
-        vector<string> res;
+        string tmp;
         vector<vector<bool>> vis;
-
-        // 前缀树结构体
-        struct TreeNode {
-            TreeNode* child[26];
-            string result;
-
-            TreeNode() {
-                result = "";
-                for(int i = 0; i < 26; i++) {
-                    child[i] = nullptr;
-                }
-            }
-        };
-
-        TreeNode* root;
-
-        void insert(string& s, TreeNode* node) {
-            // TreeNode* node = root; // 插入的时候根节点是不能动的
-            int len = s.length();
-            for(int i = 0; i < len; i++) {
-                char c = s[i];
-                int index = c - 'a';
-                if(node->child[index] == nullptr) {
-                    node->child[index] = new TreeNode();
-                }
-                node = node->child[index];
-            }
-            node->result = s;
-        }
-
+        bool res = false;
 
     public:
-        void findSearch(vector<vector<char>>& board, const int m, const int n, int i, int j, TreeNode* node) {
-
-            if(i < 0 || i >= m || j < 0 || j >= n || vis[i][j] == true) {
+        void backTrace(vector<vector<char>>& board, string& word, int m, int n, int i, int j) {
+            if (tmp.length() == word.length()) {
+                // res = (tmp == word);  // 如果这里这样用的话会覆盖原来的值，跟下面的if完全不等价
+                if (tmp == word) {
+                    res = true;
+                }
                 return;
             }
-
-            char c = board[i][j];
-            int index = c - 'a';
-            if(node->child[index] == nullptr) {
-                return; // 加上当前字符，如果不满足前缀直接返回
+            // 先判断再返回
+            if (i < 0 || i >= m || j < 0 || j >= n) {
+                return;
             }
-            // 这里向下一层之后才能判断是不是完整单词
-            node = node->child[index];
-            vis[i][j] = true;
+            
+            // if (board[i][j] != word[tmp.length()]) {  // 这里是剪枝操作
+            //     return;
+            // }
 
-            if(node->result != "") {
-                res.push_back(node->result);
-                node->result = ""; // 这里置空是为了只找一次，减少更多次的查找
+            if (!vis[i][j]) {
+                tmp.push_back(board[i][j]);
+                vis[i][j] = true;
+
+                backTrace(board, word, m, n, i + 1, j);
+
+                backTrace(board, word, m, n, i - 1, j);
+
+                backTrace(board, word, m, n, i, j + 1);
+           
+                backTrace(board, word, m, n, i, j - 1);
+
+                tmp.pop_back();
+                vis[i][j] = false;
             }
-
-
-
-            findSearch(board, m, n, i + 1, j, node);
-            findSearch(board, m, n, i - 1, j, node);
-            findSearch(board, m, n, i, j + 1, node);
-            findSearch(board, m, n, i, j - 1, node);
-
-            vis[i][j] = false;
             return;
         }
 
         bool exist(vector<vector<char>>& board, string word) {
+            int m = board.size();
+            int n = board[0].size();
+            
 
-            int m = board.size(); // row
-            int n = board[0].size(); // column
-            vis.resize(m, vector<bool>(n, false));
-            root = new TreeNode();
-
-            insert(word, root);
-
-            for(int i = 0; i < m; i++) {
-                for(int j = 0; j < n; j++) {
-                    TreeNode* node = root;
-                    findSearch(board, m, n, i, j, node);
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    tmp = "";
+                    vis.resize(m, vector<bool>(n, false));
+                    backTrace(board, word, m, n, i, j);
+                    if (res) {
+                        return true;
+                    }
                 }
             }
 
-            return (res.size() != 0);
+            return false;
         }
 };

@@ -4,18 +4,99 @@ using namespace std;
 
 // 09-03
 
+// class Trie {
+//     private:
+//         struct TreeNode {
+//             TreeNode* child[26];
+//             string result;
+//             TreeNode() {
+//                 for(int i = 0; i < 26; i++) {
+//                     child[i] = nullptr;
+//                     result = "";
+//                 }
+//             }
+//         };
+//         TreeNode* root;
+
+//     public:
+//         Trie() {
+//             root = new TreeNode();
+//         }
+        
+//         void insert(string word) {
+//             TreeNode* p = root;
+//             int len = word.length();
+//             char c = ' ';
+//             int index = 0;
+
+//             for(int i = 0; i < len; i++) {
+//                 c = word[i];
+//                 index = c - 'a';
+//                 if(p->child[index] == nullptr) {
+//                     p->child[index] = new TreeNode();
+//                 }
+//                 p = p->child[index];
+//             }
+//             p->result = word;
+//         }
+        
+//         bool search(string word) {
+//             TreeNode* p = root;
+//             int len = word.length();
+//             char c = ' ';
+//             int index = 0;
+
+//             for (int i = 0; i < len; i++) {
+//                 c = word[i];
+//                 index = c - 'a';
+//                 if (p->child[index] == nullptr) {
+//                     return false;
+//                 } else {
+//                     if (p->child[index]->result == word) {
+//                         return true;
+//                     }
+//                 }
+//                 p = p->child[index];
+//             }
+
+//             return false;
+//         }
+        
+//         bool startsWith(string prefix) {
+//             TreeNode* p = root;
+//             int len = prefix.length();
+//             char c = ' ';
+//             int index = 0;
+
+//             for (int i = 0; i < len; i++) {
+//                 c = prefix[i];
+//                 index = c - 'a';
+//                 if (p->child[index] == nullptr) {
+//                     return false;
+//                 }
+//                 p = p->child[index];
+//             }
+
+//             return true;
+//         }
+// };
+
+
+// 0908
 class Trie {
     private:
         struct TreeNode {
             TreeNode* child[26];
             string result;
+
             TreeNode() {
                 for(int i = 0; i < 26; i++) {
                     child[i] = nullptr;
-                    result = "";
                 }
+                result = "";
             }
         };
+
         TreeNode* root;
 
     public:
@@ -24,59 +105,52 @@ class Trie {
         }
         
         void insert(string word) {
-            TreeNode* p = root;
+            TreeNode* tmp = root;
             int len = word.length();
-            char c = ' ';
-            int index = 0;
 
             for(int i = 0; i < len; i++) {
-                c = word[i];
-                index = c - 'a';
-                if(p->child[index] == nullptr) {
-                    p->child[index] = new TreeNode();
+                char c = word[i];
+                int index = c - 'a';
+                if(tmp->child[index] == nullptr) {
+                    tmp->child[index] = new TreeNode();
                 }
-                p = p->child[index];
+                tmp = tmp->child[index];
             }
-            p->result = word;
+            tmp->result = word;
         }
         
         bool search(string word) {
-            TreeNode* p = root;
+            TreeNode* tmp = root;
             int len = word.length();
-            char c = ' ';
-            int index = 0;
 
-            for (int i = 0; i < len; i++) {
-                c = word[i];
-                index = c - 'a';
-                if (p->child[index] == nullptr) {
+            for(int i = 0; i < len; i++) {
+                char c = word[i];
+                int index = c - 'a';
+
+                if(tmp->child[index] == nullptr) {
                     return false;
-                } else {
-                    if (p->child[index]->result == word) {
-                        return true;
-                    }
                 }
-                p = p->child[index];
+                tmp = tmp->child[index];
             }
-
+            if(tmp->result == word) {
+                return true;
+            }
             return false;
         }
         
         bool startsWith(string prefix) {
-            TreeNode* p = root;
+            TreeNode* tmp = root;
             int len = prefix.length();
-            char c = ' ';
-            int index = 0;
 
-            for (int i = 0; i < len; i++) {
-                c = prefix[i];
-                index = c - 'a';
-                if (p->child[index] == nullptr || p->result == prefix) {
+            for(int i = 0; i < len; i++) {
+                char c = prefix[i];
+                int index = c - 'a';
+
+                if(tmp->child[index] == nullptr) {
                     return false;
                 }
-                p = p->child[index];
+                tmp = tmp->child[index];
             }
-
             return true;
         }
 };
